@@ -5,8 +5,7 @@
 5. db.createUser({user:"budi", pwd:"buditopsecret", roles:["readWrite"]}); =>(untuk memasukan user hanya bisa membaca dan memasukan data )
 6. db.createCollection('Dosen'); =>(untuk membuat collection)
 7. db.createCollection('Mahasiswa'); =>(untuk membuat collection)
-8. db.Dosen.insert([
-       {
+8. db.Dosen.insert({
             nama:"Caca",
             usia:28,
             asal:"Jakarta",
@@ -37,8 +36,7 @@
             matkul:["Fisika Dasar","Fisika Modern","Kalkulus"]
         }
     ]);
-9. Cek data yang sudah masuk -> $ db.Dosen.find().pretty();
-10. db.Mahasiswa.insert([
+9. db.Mahasiswa.insert([
        {
             nama:"Faza",
             usia:19,
@@ -64,4 +62,3 @@
             nim:789
         }
     ]);
-11. Cek data yang sudah masuk -> $ db.Mahasiswa.find().pretty();
