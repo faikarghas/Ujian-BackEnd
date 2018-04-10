@@ -1,0 +1,151 @@
+////////////////////////////////////////////////////////////////////////////////////////////////
+//                              KETERANGAN
+////////////////////////////////////////////////////////////////////////////////////////////////
+//CRUD disini menggunakan app.get karna untuk test di localhost agar berjalan
+
+// app.get = ambil, app.delete = hapus, app.post = utk mempost, app.patch = mengupdate stock
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+const express       = require('express');
+const app           = express();
+const mysql         = require('mysql');
+const bodyParser    = require('body-parser');
+const port          = 3010
+
+app.use(bodyParser.json());
+
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'faikar127',
+    database: 'databaseujiansoal1'
+});
+
+db.connect();
+
+// Cabang restoran
+
+app.get('/cabang', (req, res) => {
+    let sql = 'select * from restoran';
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send(result);
+    });
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Menu Makanan dan Minuman di setiap cabang
+
+app.get('/menu', (req, res) => {
+    let sql = 'select restoran.idrestoran,restoran.nama_restoran, restoran.cabang, food.makanan, food.kategori, food.harga from restoran join food on restoran.idrestoran = food.idrestoran;';
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send(result);
+    });
+});
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+// Melihat stock
+
+app.get('/stock', (req, res) => {
+    let sql = 'select * from stock';
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send(result);
+    });
+});
+
+// Menambah Stock
+app.get('/inputstock', (req, res) => {
+    let data = { idbahan: 112102, idkaryawan: 15, bahan_baku: "telur", jumlah: 20, satuan: "kilogram"};
+    let sql = 'insert into stock set ?';
+    db.query(sql, data, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send(result);
+    });
+});
+
+// Delete stock
+app.get('/deletestock/:bahan', (req, res) => {
+    var sql = `DELETE from stock WHERE bahan_baku = '${req.params.bahan}'`;
+    db.query(sql, (err, res1) => {
+        if (err) throw err;
+        console.log(res);
+        res.send(res1);
+    });
+});
+
+// Update Stock
+// tambah 1kg
+
+app.get('/tambahstock/:bahan_baku/:jumlah', (req, res) => {
+    var sql = `UPDATE stock SET jumlah=jumlah+'${req.params.jumlah}' WHERE bahan_baku = '${req.params.bahan_baku}'`;
+    db.query(sql, (err, res1) => {
+        if (err) throw err;
+        console.log(res);
+        res.send(res1);
+    });
+});
+
+// kurang 1kg
+
+app.get('/kurangstock/:bahan_baku/:jumlah', (req, res) => {
+    var sql = `UPDATE stock SET jumlah=jumlah-'${req.params.jumlah}' WHERE bahan_baku = '${req.params.bahan_baku}'`;
+    db.query(sql, (err, res1) => {
+        if (err) throw err;
+        console.log(res);
+        res.send(res1);
+    });
+});
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+// Karyawan
+
+app.get('/karyawan', (req, res) => {
+    let sql = 'select * from karyawan';
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send(result);
+    });
+});
+
+// memasukan data karyawan
+
+app.get('/inputkaryawan', (req, res) => {
+    let data = { idkaryawan:19, idrestoran:1 ,nama:"rany" , gender: "wanita",role:"HRD",gaji:7500000};
+    let sql = 'insert into karyawan set ?';
+    db.query(sql, data, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send(result);
+    });
+});
+
+// Delete data karyawan
+
+app.get('/deletekaryawan/:masukannama', (req, res) => {
+    var sql = `DELETE from karyawan WHERE nama = '${req.params.masukannama}'`;
+    db.query(sql, (err, res1) => {
+        if (err) throw err;
+        console.log(res);
+        res.send(res1);
+    });
+});
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+app.listen(port, () => {
+    console.log(`aktif di port ${port}`);
+});
+

@@ -1,0 +1,61 @@
+const express       = require('express');
+const app           = express();
+const MongoClient   = require('mongodb').MongoClient;
+const url           = 'mongodb://andi:anditopsecret@localhost:27017/kampus';
+const cors          = require('cors');
+const bodyParser    = require('body-parser');
+const port          = 3210;
+
+app.use(cors());
+app.use(bodyParser.json());
+
+MongoClient.connect(url, (err, db) => {
+    console.log("terhubung ke mongodb");
+});
+
+// # # # # # # create route here # # # # # #
+app.get('/dosen', (req, res) => {
+    MongoClient.connect(url, (err, db) => {
+        var collection = db.collection('Dosen');
+        collection.find({}).toArray((err, docs) => {
+            console.log(docs);
+            res.send(docs);
+        });
+    });
+});
+
+app.get('/mahasiswa', (req, res) => {
+    MongoClient.connect(url, (err, db) => {
+        var collection = db.collection('Mahasiswa');
+        collection.find({}).toArray((err, docs) => {
+            console.log(docs);
+            res.send(docs);
+        });
+    });
+});
+
+app.get('/dnama/:namadosen', (req, res) => {
+    MongoClient.connect(url, (err, db) => {
+        var collection = db.collection('Dosen');
+        collection.find({nama:req.params.namadosen}).toArray((err, docs) => {
+            console.log(docs);
+            res.send(docs);
+        });
+    });
+});
+
+
+app.get('/mnama/:namamahasiswa', (req, res) => {
+    MongoClient.connect(url, (err, db) => {
+        var collection = db.collection('Mahasiswa');
+        collection.find({ nama: req.params.namamahasiswa }).toArray((err, docs) => {
+            console.log(docs);
+            res.send(docs);
+        });
+    });
+});
+
+
+app.listen(port, () => {
+    console.log(`Server Aktif di port ${port}`)
+});
