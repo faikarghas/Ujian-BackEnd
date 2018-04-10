@@ -83,7 +83,6 @@ app.get('/deletestock/:bahan', (req, res) => {
 });
 
 // Update Stock
-// tambah 1kg
 
 app.get('/tambahstock/:bahan_baku/:jumlah', (req, res) => {
     var sql = `UPDATE stock SET jumlah=jumlah+'${req.params.jumlah}' WHERE bahan_baku = '${req.params.bahan_baku}'`;
@@ -93,8 +92,6 @@ app.get('/tambahstock/:bahan_baku/:jumlah', (req, res) => {
         res.send(res1);
     });
 });
-
-// kurang 1kg
 
 app.get('/kurangstock/:bahan_baku/:jumlah', (req, res) => {
     var sql = `UPDATE stock SET jumlah=jumlah-'${req.params.jumlah}' WHERE bahan_baku = '${req.params.bahan_baku}'`;
